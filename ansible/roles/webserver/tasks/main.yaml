@@ -1,6 +1,6 @@
 ---
 - name: install httpd
-  dnf:
+  yum:
     name: httpd
     state: present
   become_user: root
@@ -10,10 +10,20 @@
   copy:
     src: index.html
     dest: "/var/www/html/index.html"
+  become_user: root
+  become: yes
 
 - name: enable and start httpd
   service:
     name: httpd
     enabled: yes
     state: started  
-  
+  become_user: root
+  become: yes
+
+- name: ensure firewall settings
+  firewalld:
+    service: http
+    state: enabled
+  become_user: root
+  become: yes    

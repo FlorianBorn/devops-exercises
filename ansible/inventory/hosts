@@ -1,2 +1,2 @@
 [webserver]
-vm4 ansible_host=192.168.122.84
+vm4 ansible_host=192.168.122.7
