@@ -1,0 +1,19 @@
+---
+- name: install httpd
+  dnf:
+    name: httpd
+    state: present
+  become_user: root
+  become: yes
+
+- name: create a new default index.html
+  copy:
+    src: index.html
+    dest: "/var/www/html/index.html"
+
+- name: enable and start httpd
+  service:
+    name: httpd
+    enabled: yes
+    state: started  
+  
