@@ -1,0 +1,8 @@
+---
+- hosts: all
+  tasks:
+    - name: show dummy message
+      debug:
+        msg: 
+          - "hello from {{ ansible_hostname }}"
+          - "my ip is: {{ ansible_all_ipv4_addresses }}"
