@@ -4,7 +4,10 @@
     name: jenkins_server
     state: started
     image: docker.io/jenkins/jenkins
-
+    ports:
+      - "8080:8080"
+  become_user: root
+  become: yes
 
 #- name: install jenkins
 #  yum:
@@ -13,13 +16,13 @@
 #  become_user: root
 #  become: yes
 
-- name: enable and start jenkins
-  service:
-    name: jenkins
-    enabled: yes
-    state: started  
-  become_user: root
-  become: yes
+#- name: enable and start jenkins
+#  service:
+#    name: jenkins
+#    enabled: yes
+#    state: started  
+#  become_user: root
+#  become: yes
 
 #- name: ensure firewall settings
 #  firewalld:
