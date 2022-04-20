@@ -1,6 +1,6 @@
 ---
 - name: install jenkins 
-  podman_container:
+  containers.podman.podman_container:
     name: jenkins_server
     state: started
     image: docker.io/jenkins/jenkins
