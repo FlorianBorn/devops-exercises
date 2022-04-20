@@ -1,2 +1,5 @@
 [webserver]
 vm4 ansible_host=192.168.122.7
+
+[jenkins_server]
+vm2 ansible_host=192.168.122.42
