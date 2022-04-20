@@ -1,0 +1,29 @@
+---
+- name: install jenkins 
+  podman_container:
+    name: jenkins_server
+    state: started
+    image: docker.io/jenkins/jenkins
+
+
+#- name: install jenkins
+#  yum:
+#    name: jenins
+#    state: present
+#  become_user: root
+#  become: yes
+
+- name: enable and start jenkins
+  service:
+    name: jenkins
+    enabled: yes
+    state: started  
+  become_user: root
+  become: yes
+
+#- name: ensure firewall settings
+#  firewalld:
+#    service: http
+#    state: enabled
+#  become_user: root
+#  become: yes    
