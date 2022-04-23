@@ -1,4 +1,8 @@
 ---
+- podman_volume:
+    state: present
+    name: jenkins_server
+
 - name: install jenkins 
   containers.podman.podman_container:
     name: jenkins_server
@@ -7,6 +11,8 @@
     image: registry.access.redhat.com/openshift3/jenkins-2-rhel7
     ports:
       - "8080:8080"
+    volumes:
+      - jenkins_server:/var/jenkins_home
   become_user: root
   become: yes
 
