@@ -3,11 +3,19 @@
   containers.podman.podman_container:
     name: jenkins_server
     state: started
-    image: docker.io/jenkins/jenkins
+    #image: docker.io/jenkins/jenkins
+    image: registry.access.redhat.com/openshift3/jenkins-2-rhel7
     ports:
       - "8080:8080"
   become_user: root
   become: yes
+
+- name: ensure firewall settings
+  firewalld:
+    port: 8080/tcp
+    state: enabled
+  become_user: root
+  become: yes  
 
 #- name: install jenkins
 #  yum:
