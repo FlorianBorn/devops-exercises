@@ -1,7 +1,10 @@
 ---
-- podman_volume:
+- name: create to be used by jenkins
+  containers.podman.podman_volume:
     state: present
     name: jenkins_server
+  become_user: root
+  become: yes    
 
 - name: install jenkins 
   containers.podman.podman_container:
