@@ -10,8 +10,8 @@
   containers.podman.podman_container:
     name: jenkins_server
     state: started
-    #image: docker.io/jenkins/jenkins
-    image: registry.access.redhat.com/openshift3/jenkins-2-rhel7
+    image: docker.io/jenkins/jenkins
+    #image: registry.access.redhat.com/openshift3/jenkins-2-rhel7
     ports:
       - "8080:8080"
     volumes:
