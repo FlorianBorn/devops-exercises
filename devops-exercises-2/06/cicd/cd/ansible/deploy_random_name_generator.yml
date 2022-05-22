@@ -1,3 +1,10 @@
+- name: debug
+  hosts: localhost
+  tasks:
+    - name: show ansible_user
+      debug:
+        msg: "ansible_user: {{ ansible_user }}"
+
 - name: Deploy the random-name-generator
   hosts: app1
   remote_user: root
