@@ -1,0 +1,4 @@
+- name: Deploy the random-name-generator
+  hosts: app1
+  roles:
+    - random_name_generator

@@ -1,0 +1,10 @@
+# load image from jenkins
+- name: deliver the Container image
+  copy:
+    src: /container_images/random_name_generator-latest
+    dest: /container_images
+
+# unpack the image
+
+
+# deploy the application

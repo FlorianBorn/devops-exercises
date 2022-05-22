@@ -1,0 +1,39 @@
+pipeline{
+    
+    agent any // we dont have any agents beside the master node
+
+    stages{
+        stage("run deployment"){
+            steps{
+                echo "======== load the Container Image ========"
+
+                ansiblePlaybook(
+                    playook: "ansible/deploy_random_name_generator.yml"
+                    inventory: "ansible/inventory/kvm_hosts"
+                )
+
+            }
+        }
+        stage("unpack the Container Image"){
+            steps{
+                echo "======== unpack the Container Image ========"
+
+
+            }
+        }
+        stage("delpoy the Application"){
+
+        }                
+    }
+    post{
+        always{
+            echo "========always========"
+        }
+        success{
+            echo "========pipeline executed successfully ========"
+        }
+        failure{
+            echo "========pipeline execution failed========"
+        }
+    }
+}
