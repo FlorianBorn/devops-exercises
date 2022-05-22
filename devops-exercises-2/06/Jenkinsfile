@@ -8,7 +8,7 @@ pipeline{
                 echo "======== Building the Container Image ========"
 
                 sh """
-                podman build -t random_name_generator:latest -f Containerfile .
+                podman build -t random_name_generator:latest -f Containerfile.app .
             
                 """
             }
