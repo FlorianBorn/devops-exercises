@@ -7,16 +7,12 @@ pipeline{
             steps{
                 echo "======== load the Container Image ========"
 
-                sh """
-                ls -la 
-                pwd
-                """
-
-                ansiblePlaybook(
-                    playbook: "ansible/deploy_random_name_generator.yml",
-                    inventory: "ansible/inventory/kvm_hosts"
-                )
-
+                dir("devops-exercises-2/06/cicd/ansible") {
+                    ansiblePlaybook(
+                        playbook: "deploy_random_name_generator.yml",
+                        inventory: "inventory/kvm_hosts"
+                    )
+                }
             }
         }       
     }
