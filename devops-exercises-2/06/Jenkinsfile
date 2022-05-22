@@ -1,6 +1,7 @@
 pipeline{
+    
     agent any // we dont have any agents beside the master node
-    }
+
     stages{
         stage("build Container Image"){
             steps{
