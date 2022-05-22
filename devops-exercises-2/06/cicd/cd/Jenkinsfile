@@ -2,6 +2,10 @@ pipeline{
     
     agent any // we dont have any agents beside the master node
 
+    environment {
+        ANSIBLE_CONFIG = "${env.WORKSPACE}/devops-exercises-2/06/cicd/cd/ansible/ansible.cfg"
+    }
+
     stages{
         stage("run deployment"){
             steps{
