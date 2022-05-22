@@ -7,18 +7,23 @@ pipeline{
             steps{
                 echo "======== Building the Container Image ========"
 
-                sh """
-                podman build -t random_name_generator:latest -f Containerfile.app .
-            
-                """
+                dir("devops-exercises-2/06") {
+                    sh """
+                    buildah bud --layers -t random_name_generator:latest -f Containerfile.app .
+                
+                    """
+                }
             }
         }
         stage("Run Tests"){
             steps{
                 echo "======== Test the Application ========"
 
-                sh """
-                """
+                dir("devops-exercises-2/06/app") {
+                    sh """
+                    pytest
+                    """
+                }
             }
         }
         stage("Store the Image"){
@@ -26,9 +31,7 @@ pipeline{
                 echo "======== Store the Container Image ========"
 
                 sh """
-                podman save > random_name_generator.tar localhost/random_name_generator:latest
-                mv random_name_generator.tar /image-repository/random_name_generator-latest/random-name-generator.tar
-                podman rmi localhost/random_name_generator:latest
+                buildah push localhost/random_name_generator:latest dir:/container_images/random_name_generator-latest
                 """
             }
         }                
