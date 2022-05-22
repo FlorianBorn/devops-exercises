@@ -1,9 +1,12 @@
 - name: debug
   hosts: localhost
   tasks:
-    - name: show ansible_user
-      debug:
-        msg: "ansible_user: {{ ansible_user }}"
+    - name: get the username running the deploy
+      become: false
+      local_action: command whoami
+      register: username_on_the_host
+
+    - debug: var=username_on_the_host
 
 - name: Deploy the random-name-generator
   hosts: app1
