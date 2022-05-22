@@ -13,17 +13,7 @@ pipeline{
                 )
 
             }
-        }
-        stage("unpack the Container Image"){
-            steps{
-                echo "======== unpack the Container Image ========"
-
-
-            }
-        }
-        stage("delpoy the Application"){
-
-        }                
+        }       
     }
     post{
         always{
