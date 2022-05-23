@@ -9,7 +9,7 @@
 - name: pull the random_name_generator image
   containers.podman.podman_image:
     pull: yes
-    path: "dir:/container_images/random_name_generator-latest"
+    name: "dir:/container_images/random_name_generator-latest"
 
 
 # deploy the application
