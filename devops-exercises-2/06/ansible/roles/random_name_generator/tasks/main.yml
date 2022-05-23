@@ -7,9 +7,8 @@
 
 # unpack the image
 - name: pull the random_name_generator image
-  containers.podman.podman_load:
-    path: "/container_images/random_name_generator-latest"
-      
+  command: "podman pull dir:/container_images/random_name_generator-latest"
+
 
 
 # deploy the application
