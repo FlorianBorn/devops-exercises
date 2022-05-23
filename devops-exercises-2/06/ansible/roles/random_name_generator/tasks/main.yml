@@ -9,6 +9,11 @@
 - name: pull the random_name_generator image
   command: "podman pull dir:/container_images/random_name_generator-latest"
 
-
-
 # deploy the application
+- name: "start the Application"
+  containers.podman.podman_container:
+    name: random-name-generator
+    image: localhost/container_images/random_name_generator-latest
+    state: started
+    publish:
+      - "8000:8000"
