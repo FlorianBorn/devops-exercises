@@ -1,7 +1,10 @@
 ---
 - name: install podman
-  yum:
-    name: podman
+  package:
+    name: "{{ item }}"
     state: present
   become_user: root
   become: yes
+  loop:
+    - podman
+    - buildah
