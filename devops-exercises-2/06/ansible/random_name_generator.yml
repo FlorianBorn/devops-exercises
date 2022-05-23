@@ -3,4 +3,4 @@
   remote_user: root
   roles:
     - podman
-  #  - random_name_generator
+    - random_name_generator
