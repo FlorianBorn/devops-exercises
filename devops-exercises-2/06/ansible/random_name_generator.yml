@@ -1,0 +1,6 @@
+- name: "random-name-generator Server"
+  hosts: app1
+  remote_user: root
+  roles:
+    - podman
+  #  - random_name_generator
