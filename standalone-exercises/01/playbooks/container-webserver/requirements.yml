@@ -1,0 +1,5 @@
+---    
+roles:
+  - src: https://github.com/FlorianBorn/devops-standalone-01-container_httpd.git
+    version: main
+    name: container-httpd

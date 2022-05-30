@@ -1,4 +1,4 @@
 - name: webserver
   hosts: localhost
   roles: 
-    - ../../roles/container-httpd
+    - container-httpd
