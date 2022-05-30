@@ -1,0 +1,5 @@
+---    
+roles:
+  - src: https://github.com/FlorianBorn/devops-standalone-01-podman.git
+    version: main
+    name: podman
