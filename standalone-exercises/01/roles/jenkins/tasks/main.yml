@@ -1,0 +1,7 @@
+- name: Create jenkins container
+  containers.podman.podman_container:
+    name: my_jenkins
+    image: docker.io/jenkins/jenkins
+    ports:
+      - "8080:8080"
+      - "50000:50000"
