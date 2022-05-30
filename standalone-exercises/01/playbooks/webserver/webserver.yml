@@ -1,5 +1,5 @@
 - name: webserver
-  hosts: example-webserver
+  hosts: localhost
   roles: 
     - podman
     - httpd
