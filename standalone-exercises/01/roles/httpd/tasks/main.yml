@@ -1,6 +1,6 @@
 - name: Create httpd container
   containers.podman.podman_container:
-    name: mydata
+    name: my_webserver
     image: docker.io/library/httpd
     ports:
       - "9090:80"
