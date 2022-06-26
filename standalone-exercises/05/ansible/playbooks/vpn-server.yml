@@ -1,0 +1,4 @@
+- name: "VPN Server"
+  hosts: vpn_server
+  roles:
+    - vpn-server
