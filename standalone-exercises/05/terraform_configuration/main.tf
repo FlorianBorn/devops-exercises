@@ -102,6 +102,12 @@ resource "aws_instance" "client_instance" {
     Name = var.client_instance_name
   }
 
+  # copy the bash script to the new instance
+  provisioner "file" {
+    source      = "scripts/init_vpn-client.sh"
+    destination = "/tmp/init_vpn-client.sh"
+  }
+
   # Establishes connection to be used by all
   # generic remote provisioners (i.e. file/remote-exec)
   connection {
@@ -112,13 +118,12 @@ resource "aws_instance" "client_instance" {
     host        = self.public_ip
   }
 
-#  provisioner "remote-exec" {
-#    inline = [
-#      "whoami",
-#      "echo 'here am i'",
-#      "echo 'hello world' > ~/hello.txt"
-#    ]
-#  }
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/init_vpn-client.sh",
+      "sudo /tmp/init_vpn-client.sh",
+    ]
+  }
 
 }
 
