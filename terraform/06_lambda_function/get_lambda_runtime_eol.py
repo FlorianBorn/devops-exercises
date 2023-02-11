@@ -7,11 +7,11 @@ SITE = os.environ['site']  # URL of the site to check, stored in the site enviro
 EXPECTED = os.environ['expected']  # String expected to be on the page, stored in the expected environment variable
 
 
-def get_eol_timediff_in_days(eol):
+def get_days_to_eol(eol):
     date_now = datetime.now() #.strftime("%Y-%m-%d")
     datetime_eol = datetime.strptime(eol, "%Y-%m-%d")
-    time_diff_in_days = (datetime_eol - date_now).days
-    return time_diff_in_days
+    days_to_eol = (datetime_eol - date_now).days
+    return days_to_eol
 
 
 def check_eol(eol, warn_days, crit_days):
@@ -19,11 +19,11 @@ def check_eol(eol, warn_days, crit_days):
     WARNING = "WARNING"
     OK = "OK"
     
-    time_diff_in_days = get_eol_timediff_in_days(eol)
+    days_to_eol = get_days_to_eol(eol)
     
-    if time_diff_in_days < crit_days:
+    if days_to_eol < crit_days:
         status_code = CRIT
-    elif time_diff_in_days < warn_days:
+    elif days_to_eol < warn_days:
         status_code = WARNING
     else:
         status_code = OK
@@ -131,7 +131,7 @@ def lambda_handler(event, context):
         eol_status = check_eol(cycle_detail['eol'], warn_days=180, crit_days=90)
         runtime["eol"] = cycle_detail['eol']
         runtime["eol_status"] = eol_status
-        runtime["days_to_eol"] = get_eol_timediff_in_days(cycle_detail['eol'])
+        runtime["days_to_eol"] = get_days_to_eol(cycle_detail['eol'])
         
     # send notification if neccessary
     for runtime in runtimes:
