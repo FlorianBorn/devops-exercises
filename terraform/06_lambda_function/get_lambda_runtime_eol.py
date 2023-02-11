@@ -21,9 +21,9 @@ def check_eol(eol, warn_days, crit_days):
     
     days_to_eol = get_days_to_eol(eol)
     
-    if days_to_eol < crit_days:
+    if days_to_eol =< crit_days:
         status_code = CRIT
-    elif days_to_eol < warn_days:
+    elif days_to_eol =< warn_days:
         status_code = WARNING
     else:
         status_code = OK
