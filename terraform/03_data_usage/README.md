@@ -1,0 +1,3 @@
+- deploy the network infrastructure first
+- the hosts configruation relies on the network infrastructure to be there, because it uses ressources from it as data source
+- the only information about the network is retrieved by via data source from the host configuration
