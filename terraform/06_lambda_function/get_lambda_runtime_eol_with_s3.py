@@ -5,6 +5,7 @@ import json
 import boto3
 from botocore.exceptions import ClientError
 
+DST_BUCKET = os.environ["destination_bucket"]
 
 def get_days_to_eol(eol):
     date_now = datetime.now() #.strftime("%Y-%m-%d")
@@ -96,6 +97,7 @@ def s3_object_exists(s3_client, bucket_name, status_file_path):
     try:
         s3_client.head_object(Bucket=bucket_name, Key=status_file_path)
     except ClientError as e:
+        print(f"GOT ERROR: {e}")
         return int(e.response['Error']['Code']) != 404
     return True
     
@@ -150,8 +152,8 @@ def lambda_handler(event, context):
     # read eol states from s3 if existing
     status_file_path = "eol_check/foo.txt.txt"
     last_runtime_status = {}
-    if s3_object_exists(s3_client, bucket_name="lambda-foobuck", status_file_path=status_file_path):
-        last_runtime_status = get_runtime_status_from_s3(s3_client, bucket_name="lambda-foobuck", status_file_path=status_file_path)
+    if s3_object_exists(s3_client, bucket_name=DST_BUCKET, status_file_path=status_file_path):
+        last_runtime_status = get_runtime_status_from_s3(s3_client, bucket_name=DST_BUCKET, status_file_path=status_file_path)
     else:
         print("file does not exist!")
         print(last_runtime_status)
@@ -214,12 +216,13 @@ def lambda_handler(event, context):
     
     # write EOL status to S3    
     print("write to bucket")
-    write_runtime_status_to_s3(s3_client, bucket_name="lambda-foobuck", status_file_path=status_file_path, runtimes=function_to_runtime)
+    write_runtime_status_to_s3(s3_client, bucket_name=DST_BUCKET, status_file_path=status_file_path, runtimes=function_to_runtime)
         
     # send notification if neccessary
-    for distinct_runtime, runtime in runtimes.items():
+    #for distinct_runtime, runtime in runtimes.items():
+    for function, runtime in function_to_runtime.items():
         if runtime["eol_status"] != "OK":
-            message = f"Found Runtime nearing its End-of-Life.\nAffected runtime: {runtime}"
+            message = f"Found Lambda Function which uses Runtime with near End-of-Life runtime.\nFunction: {function}\nAffected runtime: {runtime}"
             send_notification(message)
     
     print("Checked Runtimes, here is the result:")

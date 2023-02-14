@@ -92,7 +92,7 @@ def send_notification(message):
 
 
 def lambda_handler(event, context):
-    print('Checking {} at {}...'.format(SITE, event['time']))
+    #print('Checking {} at {}...'.format(SITE, event['time']))
     
     # get all lambda functions
     lambda_functions = get_lambda_functions()
@@ -146,7 +146,7 @@ def lambda_handler(event, context):
         raise
     else:
         print('Check passed!')
-        return event['time']
+#        return event['time']
 #    finally:
 #        print('Check complete at {}'.format(str(datetime.now())))
 
