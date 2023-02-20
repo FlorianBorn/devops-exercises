@@ -11,8 +11,8 @@ terraform {
 
 provider "aws" {
   region     = "us-east-1"
-  access_key = "AKIAR7USEHHQ57CSEBQR"                     # retrieve this when opening the cloud playground
-  secret_key = "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" # retrieve this when opening the cloud playground
+  #access_key = "***"  # instead, export this as env var: export AWS_ACCESS_KEY_ID="<access-key-id>"
+  #secret_key = "***" # instead, export this as env var: export AWS_SECRET_ACCESS_KEY="<secret-access-key>"
 }
 
 
@@ -83,6 +83,16 @@ resource "aws_iam_policy" "list_lambda_functions" {
                 "lambda:ListFunctions"
             ],
             "Resource": "*"
+        },
+        {
+          "Effect": "Allow",
+          "Action": [
+            "logs:CreateLogStream",
+            "logs:PutLogEvents"
+          ],
+          "Resource": [
+            "arn:aws:logs:region:accountId:log-group:/aws/lambda/${aws_lambda_function.get_lambda_runtime_eol.function_name}:*"
+          ]
         }
     ]
 }

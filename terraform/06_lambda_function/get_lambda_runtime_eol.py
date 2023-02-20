@@ -31,14 +31,11 @@ def get_lambda_functions():
     import boto3
     client = boto3.client("lambda")
     response = client.list_functions()
-    print("lambda_response")
-    print(response)
     if response["ResponseMetadata"]["HTTPStatusCode"] != 200:
         print("could not read lambda_functions")
         raise
     
     lambda_functions = response["Functions"]
-    print(lambda_functions)
     return lambda_functions
 
 
@@ -54,8 +51,6 @@ def read_product_eols(product):
     except TimeoutError:
         print("Request timed out")        
     response_body = json.loads(body)
-    print(f"{response_body}")
-
 
     return response_body
 
@@ -72,7 +67,6 @@ def read_product_cycle_eol(product, cycle):
     except TimeoutError:
         print("Request timed out")        
     response_body = json.loads(body)
-    print(f"{response_body}")
 
     return response_body
 
@@ -95,9 +89,11 @@ def lambda_handler(event, context):
     #print('Checking {} at {}...'.format(SITE, event['time']))
     
     # get all lambda functions
+    print("Get all lambda functions...")
     lambda_functions = get_lambda_functions()
     
     # check for unknown runtimes
+    print("Check, if there are unknown runtimes...")
     unknown_runtimes = []
     for lambda_function in lambda_functions:
         runtime = lambda_function['Runtime']
@@ -112,32 +108,50 @@ def lambda_handler(event, context):
     
     
     # get the runtime of each lambda function
-    runtimes = []
+    print("Get distinct runtimes from all lambda functions...")
+    distinct_runtimes = set()
     for lambda_function in lambda_functions:
         # get product and its version
         runtime = lambda_function['Runtime']
-        product, cycle = get_product_and_cycle_from_runtime(runtime)
-        runtimes.append({
+        distinct_runtimes.add(runtime)    
+        
+    # get the runtime of each lambda function
+    print("Initiate new runtime object...")
+    runtimes = {}
+    for distinct_runtime in distinct_runtimes:
+        tmp_runtime = {}
+        product, cycle = get_product_and_cycle_from_runtime(distinct_runtime)
+        runtimes[distinct_runtime] = {
             "product": product,
             "cycle": cycle
-        })
+        }       
         
     # get EOL for each runtime
-    for runtime in runtimes:
+    print("Get the End Of Life (EOL) info for each runtime...")
+    for distinct_runtime, runtime in runtimes.items():
         cycle_detail = read_product_cycle_eol(runtime["product"], runtime["cycle"])
         eol_status = check_eol(cycle_detail['eol'], warn_days=180, crit_days=90)
         runtime["eol"] = cycle_detail['eol']
         runtime["eol_status"] = eol_status
         runtime["days_to_eol"] = get_days_to_eol(cycle_detail['eol'])
         
+    # map function_name to runtime
+    print("Mapping functions to runtimes...")
+    function_to_runtime = {}
+    for lambda_function in lambda_functions:
+        function_name = lambda_function["FunctionName"]
+        runtime = lambda_function['Runtime']
+        function_to_runtime[function_name] = runtimes[runtime]        
+        
     # send notification if neccessary
-    for runtime in runtimes:
+    for function, runtime in function_to_runtime.items():
         if runtime["eol_status"] != "OK":
-            message = f"Found Runtime nearing its End-of-Life.\nAffected runtime: {runtime}"
+            message = f"Found Lambda Function which uses Runtime with near End-of-Life runtime.\nFunction: {function}\nAffected runtime: {runtime}"
             send_notification(message)
     
-    print("Checked Runtimes, here is the result:")
-    print(runtimes)
+    print("function_to_runtime")
+    print(function_to_runtime)
+    
     
     try:
         response = read_product_eols("python")
