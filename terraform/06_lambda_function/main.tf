@@ -90,10 +90,16 @@ resource "aws_iam_policy" "list_lambda_functions" {
             "logs:CreateLogStream",
             "logs:PutLogEvents"
           ],
-          "Resource": [
-            "arn:aws:logs:region:accountId:log-group:/aws/lambda/${aws_lambda_function.get_lambda_runtime_eol.function_name}:*"
-          ]
-        }
+          "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ses:SendEmail",
+                "ses:SendRawEmail"
+            ],
+            "Resource": "*"
+        }        
     ]
 }
 HERE

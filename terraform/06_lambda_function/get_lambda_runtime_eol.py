@@ -2,6 +2,7 @@ import os
 from datetime import datetime, timedelta
 from urllib.request import urlopen
 import json
+import boto3
 
 
 def get_days_to_eol(eol):
@@ -81,13 +82,46 @@ def get_product_and_cycle_from_runtime(runtime):
     return product, cycle
 
 
+def send_email(message):
+    # Set up the SES client
+    ses = boto3.client('ses')
+
+    # Construct the message
+    message = {
+        'Subject': {
+            'Data': 'Test email'
+        },
+        'Body': {
+            'Text': {
+                'Data': 'This is a test email'
+            }
+        }
+    }
+
+    # Send the message
+    response = ses.send_email(
+        Source='your_email_address@example.com',
+        Destination={
+            'ToAddresses': [
+                'charismatischunwiderstehlicherrabe@mdz.email',
+            ]
+        },
+        Message=message
+    )
+
+    print(response)
+    
+
 def send_notification(message):
     print(f"{message}")
+
+
 
 
 def lambda_handler(event, context):
     #print('Checking {} at {}...'.format(SITE, event['time']))
     
+    send_email("foobar")
     # get all lambda functions
     print("Get all lambda functions...")
     lambda_functions = get_lambda_functions()
@@ -151,6 +185,7 @@ def lambda_handler(event, context):
     
     print("function_to_runtime")
     print(function_to_runtime)
+    
     
     
     try:
