@@ -1,19 +1,3 @@
-terraform {
-  required_version = "~> 1.3.0"
-
- required_providers {
-   aws = {
-     source = "hashicorp/aws"
-     version = "~> 4.54.0"
-    }
- }
-}
-
-provider "aws" {
-  access_key = "AKIAVI3OPSQOCOB65JUS"
-  secret_key = "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"
-    region = "us-east-1"
-}
 
 
 ######## ACCESS KEYS #############

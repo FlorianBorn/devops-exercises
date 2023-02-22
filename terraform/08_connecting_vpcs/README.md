@@ -22,5 +22,44 @@ VPC peering and Transit Gateway: Wenn man Layer3 IP Connectivity zwischen den VP
 
 # Tasks
 ## 1. Connect two VPCs with VPC peering, one should provide a Webserver, the other one should have access to this server
+run terraform:  
+```
+terraform plan -var 'mode_vpc_peering=true'
+```
 
 ## 2. Connect two VPCs with AWS privatelink, one should provide a Webserver, the other one should have access to this server
+(1) Create an Endpoint Service (Provider Side)
+(1.1) Create a Target Group
+(1.2) Create a Network Load Balancer (NLB)
+(1.3) Create an Ednpoint Service
+(1.4) Allow the NLB to access the Webservice (configure Security Groups)
+
+(2) Connect to the Endpoint Service (Consumer Side)
+(2.1) --> VPC --> Endpoints --> Create Endpoint 
+    --> Service category: Other endpoint services 
+    --> Service name: DNS Name of the service
+    --> VPC: select the Consumer VPC
+    --> Subnet: choose one
+    --> IP: IPv4
+(2.2) Configure Security Group
+    --> the Endpoint will create an ENI, which is associated with a Security Group
+    --> allow INBOUND traffic to the Port where the Service is running on (Port 80 in our example)
+
+(3) Accept the Endpoint Connection Request (Provider Side)
+
+(4) Nimm den DNS Namens des Endpoints (nicht des Endpoint services) (Consumer Side)
+curl -v /<Endpoint DNS/>
+--> check Security Groups if not working
+
+https://www.youtube.com/watch?v=0bHXWIM4_0o
+
+Info: The Endpoint Service is only available in the AZ(s) in which it is deployed
+--> you cannot access the Endpoint Service from an AZ, in which it is not deployed 
+
+
+See: https://docs.aws.amazon.com/vpc/latest/privatelink/create-endpoint-service.html
+
+run terraform:  
+```
+terraform plan -var 'mode_vpc_private_link=true'
+```
